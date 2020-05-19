@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todoapp/pages/home.dart' show HomePage;
+import 'package:todoapp/pages/list_todo.dart' show ListTodoPage;
+import 'package:todoapp/pages/new_todo.dart' show NewTodoPage;
 
 void main() {
   runApp(TodoApp());
@@ -13,7 +16,11 @@ class TodoApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Text('Home'),
+      routes: {
+        '/': (context) => HomePage(),
+        '/new': (context) => NewTodoPage(),
+        '/list': (context) => ListTodoPage()
+      },
     );
   }
 }
