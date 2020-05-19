@@ -14,6 +14,9 @@ class TodoApp extends StatelessWidget {
       title: 'Todo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        iconTheme: IconThemeData(
+          color: Colors.white
+        ),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {

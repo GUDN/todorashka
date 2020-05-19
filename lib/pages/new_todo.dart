@@ -10,7 +10,7 @@ class NewTodoPage extends StatelessWidget {
       ),
       body: Center(
         child: Text('New todo here'),
-      )
+      ),
     );
   }
 }
