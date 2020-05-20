@@ -17,14 +17,32 @@ class TodoApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Todo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-          buttonColor: Colors.blue[400],
+          primarySwatch: Colors.grey,
+          primaryColor: Colors.grey[800],
+          canvasColor: Colors.grey[700],
+          backgroundColor: Colors.grey[900],
+          buttonColor: Colors.grey[800],
           textTheme: const TextTheme(
             button: const TextStyle(
               color: Colors.white
+            ),
+            headline3: const TextStyle(
+              color: Colors.white,
+            ),
+            headline6: const TextStyle(
+              color: Colors.grey,
+            ),
+            caption: const TextStyle(
+              color: Colors.grey,
+            ),
+            bodyText1: const TextStyle(
+              color: Colors.grey
+            ),
+            bodyText2: const TextStyle(
+              color: Colors.white
             )
           ),
-          iconTheme: IconThemeData(
+          iconTheme: const IconThemeData(
             color: Colors.white
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,

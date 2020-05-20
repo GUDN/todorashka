@@ -7,8 +7,9 @@ class ListTodoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text('All todo'),
+        title: Text('All todos'),
         centerTitle: true,
       ),
       body: ListTodo()
@@ -42,9 +43,18 @@ class _ListTodoState extends State<ListTodo> {
         for (final todo in todos.todos)
           ListTile(
             key: ValueKey(todo.creationTime.toString()),
-            title: Text(todo.todo),
-            subtitle: Text(_dateFormat.format(todo.creationTime)),
-            trailing: const Icon(Icons.drag_handle),
+            title: Text(
+              todo.todo,
+              style: Theme.of(context).textTheme.bodyText2,
+            ),
+            subtitle: Text(
+              _dateFormat.format(todo.creationTime),
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+            trailing: const Icon(
+              Icons.drag_handle,
+              color: Colors.white,
+            ),
           ),
       ],
     );

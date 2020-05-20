@@ -21,6 +21,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text('TODO'),
         centerTitle: true,
@@ -50,7 +51,10 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Navigator.pushNamed(context, '/new');
         },
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         backgroundColor: Theme.of(context).primaryColor,
       ),
     );

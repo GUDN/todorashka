@@ -21,6 +21,7 @@ class _NewTodoPageState extends State<NewTodoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         title: Text('New todo'),
         centerTitle: true,
@@ -43,8 +44,14 @@ class _NewTodoPageState extends State<NewTodoPage> {
               child: ListView.builder(
                 itemCount: _todos.length,
                 itemBuilder: (context, index) => ListTile(
-                  title: Text(_todos[index]),
-                  trailing: const Icon(Icons.remove),
+                  title: Text(
+                    _todos[index],
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                  trailing: const Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                  ),
                   onLongPress: () {
                     setState(() {
                       _todos.removeAt(index);
@@ -63,8 +70,10 @@ class _NewTodoPageState extends State<NewTodoPage> {
                       controller: _todoInputController,
                       autocorrect: true,
                       autofocus: true,
+                      style: Theme.of(context).textTheme.bodyText2,
                       decoration: InputDecoration(
-                          labelText: 'Enter some todo',
+                          labelText: 'Enter any todo',
+                          labelStyle: Theme.of(context).textTheme.bodyText1,
                           contentPadding: EdgeInsets.symmetric(horizontal: 5)
                       ),
                       validator: (value) => value.trim().length > 0 ? null : 'Enter todo',
@@ -86,7 +95,11 @@ class _NewTodoPageState extends State<NewTodoPage> {
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 75),
         child: FloatingActionButton(
           onPressed: createTodos,
-          child: const Icon(Icons.vertical_align_bottom),
+          backgroundColor: Theme.of(context).primaryColor,
+          child: const Icon(
+            Icons.vertical_align_bottom,
+            color: Colors.white,
+          ),
         ),
       ),
     );
