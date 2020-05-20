@@ -24,19 +24,23 @@ class TodoList extends ChangeNotifier {
   int get length => _todos.length;
   List<Todo> get todos => _todos;
 
-  void add(Todo todo) async {
-    todo.index = await getLastIndex() + 1;
+  void add(List<Todo> todos) async {
+    var index = await getLastIndex() + 1;
     final Database database = await DBProvider.db.database;
-    todo.id = await database.insert(
-      'todo',
-      {
-        'todo': todo.todo,
-        'creationTime': todo.creationTime.millisecondsSinceEpoch,
-        'index_': todo.index
-      },
-      conflictAlgorithm: ConflictAlgorithm.abort
-    );
-    _todos.add(todo);
+    for (var i = 0; i < todos.length; ++i) {
+      todos[i].id = await database.insert(
+          'todo',
+          {
+            'todo': todos[i].todo,
+            'creationTime': todos[i].creationTime.millisecondsSinceEpoch,
+            'index_': index
+          },
+          conflictAlgorithm: ConflictAlgorithm.abort
+      );
+      todos[i].index = index;
+      index += 1;
+    }
+    _todos.addAll(todos);
     notifyListeners();
   }
 
