@@ -10,10 +10,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final DateFormat _dateFormat = DateFormat('dd.MM.yyyy H:mm');
+  bool loaded = false;
 
   @override
   Widget build(BuildContext context) {
     final todos = Provider.of<TodoList>(context);
+    if (!loaded) {
+      todos.loadFromDatabase();
+      loaded = true;
+    }
 
     return Scaffold(
       appBar: AppBar(

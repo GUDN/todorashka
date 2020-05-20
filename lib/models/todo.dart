@@ -1,13 +1,20 @@
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:todoapp/database.dart';
 
 class Todo {
   String todo;
   DateTime creationTime;
+  int index;
+  int id;
   
-  Todo({ @required String todo, DateTime creationTime })
+  Todo({ @required String todo, DateTime creationTime, int index, int id })
       : todo = todo,
-        creationTime = creationTime ?? DateTime.now();
+        creationTime = creationTime ?? DateTime.now(),
+        index = index,
+        id = id;
 }
 
 class TodoList extends ChangeNotifier {
@@ -17,13 +24,33 @@ class TodoList extends ChangeNotifier {
   int get length => _todos.length;
   List<Todo> get todos => _todos;
 
-  void add(Todo todo) {
+  void add(Todo todo) async {
+    todo.index = await getLastIndex() + 1;
+    final Database database = await DBProvider.db.database;
+    todo.id = await database.insert(
+      'todo',
+      {
+        'todo': todo.todo,
+        'creationTime': todo.creationTime.millisecondsSinceEpoch,
+        'index_': todo.index
+      },
+      conflictAlgorithm: ConflictAlgorithm.abort
+    );
     _todos.add(todo);
     notifyListeners();
   }
 
-  void pop() {
+  void pop() async {
+    final Database database = await DBProvider.db.database;
+    final int result = await database.delete(
+      'todo',
+      where: 'id = ?',
+      whereArgs: [_todos[0].id]
+    );
+    if (result == 0)
+      return;
     _todos.removeAt(0);
+    updateIndexes();
     notifyListeners();
   }
 
@@ -33,6 +60,52 @@ class TodoList extends ChangeNotifier {
       _todos.removeAt(oldIndex);
     else
       _todos.removeAt(oldIndex + 1);
+    updateIndexes();
+    notifyListeners();
+  }
+
+  Future<int> getLastIndex() async {
+    final Database database = await DBProvider.db.database;
+    final query = await database.query(
+      'todo',
+      columns: ['index_'],
+      orderBy: '-index_',
+      limit: 1
+    );
+    if (query.length > 0)
+      return (query[0]['index_'] as int);
+    return -1;
+  }
+
+  void updateIndexes() async {
+    final Database database = await DBProvider.db.database;
+    final batch = database.batch();
+    _todos.asMap().forEach((index, value) {
+      batch.update(
+        'todo',
+        {'index_': index},
+        where: 'id = ?',
+        whereArgs: [value.id]
+      );
+      _todos[index].index = index;
+    });
+    batch.commit(noResult: true);
+  }
+
+  void loadFromDatabase() async {
+    final Database database = await DBProvider.db.database;
+    final List<Map<String, dynamic>> records = await database.query(
+      'todo',
+      orderBy: 'index_'
+    );
+    records.forEach((element) {
+      _todos.add(Todo(
+        todo: element['todo'],
+        creationTime: DateTime.fromMillisecondsSinceEpoch(element['creationTime']),
+        id: element['id'],
+        index: element['index_']
+      ));
+    });
     notifyListeners();
   }
 }
