@@ -44,6 +44,27 @@ class TodoList extends ChangeNotifier {
     notifyListeners();
   }
 
+  void addFirst(List<Todo> todos) async {
+    var index = -1;
+    final Database database = await DBProvider.db.database;
+    for (var i = 0; i < todos.length; ++i) {
+      todos[i].id = await database.insert(
+          'todo',
+          {
+            'todo': todos[i].todo,
+            'creationTime': todos[i].creationTime.millisecondsSinceEpoch,
+            'index_': index
+          },
+          conflictAlgorithm: ConflictAlgorithm.abort
+      );
+      todos[i].index = index;
+      index -= 1;
+    }
+    _todos.insertAll(0, todos);
+    updateIndexes();
+    notifyListeners();
+  }
+
   void pop() async {
     final Database database = await DBProvider.db.database;
     final int result = await database.delete(

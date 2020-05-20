@@ -24,6 +24,12 @@ class _NewTodoPageState extends State<NewTodoPage> {
       appBar: AppBar(
         title: Text('New todo'),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            onPressed: createTodosFirst,
+            icon: const Icon(Icons.vertical_align_top),
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -80,7 +86,7 @@ class _NewTodoPageState extends State<NewTodoPage> {
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 75),
         child: FloatingActionButton(
           onPressed: createTodos,
-          child: const Icon(Icons.done),
+          child: const Icon(Icons.vertical_align_bottom),
         ),
       ),
     );
@@ -90,6 +96,14 @@ class _NewTodoPageState extends State<NewTodoPage> {
     addTodo();
     Provider.of<TodoList>(context, listen: false)
         .add(_todos.map((e) => Todo(todo: e)).toList());
+    if (Navigator.canPop(context))
+      Navigator.pop(context);
+  }
+
+  void createTodosFirst() {
+    addTodo();
+    Provider.of<TodoList>(context, listen: false)
+        .addFirst(_todos.map((e) => Todo(todo: e)).toList());
     if (Navigator.canPop(context))
       Navigator.pop(context);
   }
