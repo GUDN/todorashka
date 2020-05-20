@@ -3,18 +3,27 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todoapp/models/todo.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final DateFormat _dateFormat = DateFormat('dd.MM.yyyy H:mm');
+
   @override
   Widget build(BuildContext context) {
+    final todos = Provider.of<TodoList>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('TODO'),
         centerTitle: true,
         actionsIconTheme: Theme.of(context).iconTheme,
         actions: <Widget>[
-          IconButton(
+          if (todos.current != null) IconButton(
             onPressed: () {
-              Provider.of<TodoList>(context, listen: false).pop();
+              todos.pop();
             },
             icon: const Icon(Icons.done)
           ),
@@ -29,7 +38,7 @@ class HomePage extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CurrentTodo(),
+          child: currentTodo(todos.current),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -41,21 +50,8 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-}
 
-class CurrentTodo extends StatefulWidget {
-  @override
-  _CurrentTodoState createState() => _CurrentTodoState();
-}
-
-class _CurrentTodoState extends State<CurrentTodo> {
-  final DateFormat _dateFormat = DateFormat('dd.MM.yyyy H:mm');
-
-  @override
-  Widget build(BuildContext context) {
-    final todos = Provider.of<TodoList>(context);
-    var todo = todos.current;
-
+  Widget currentTodo(todo) {
     if (todo == null)
       return Text(
         'No current todo',
