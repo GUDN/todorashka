@@ -15,7 +15,7 @@ class TodoApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => TodoList(),
       child: MaterialApp(
-        title: 'Todo',
+        title: 'Todorashka',
         theme: ThemeData(
           primarySwatch: Colors.grey,
           primaryColor: Colors.grey[800],

@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text('TODO'),
+        title: Text('Todorashka'),
         centerTitle: true,
         actionsIconTheme: Theme.of(context).iconTheme,
         actions: <Widget>[
